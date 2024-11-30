@@ -6,6 +6,7 @@ class TestMathFunctions(unittest.TestCase):
         self.assertEqual(add(2, 3), 5)
         self.assertEqual(add(-1, 1), 0)
         self.assertEqual(add(-1, -1), -2)
+        # self.assertEqual(add(-1, -1), -3)
 
     def test_subtract(self):
         self.assertEqual(subtract(5, 3), 2)
