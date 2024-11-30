@@ -49,10 +49,19 @@ def wait_for_result(token, timeout=30):
     while time.time() - start_time < timeout:
         result = get_submission_result(token)
         status = result["status"]["description"]
-        if status in ["Accepted", "Compilation Error", "Runtime Error", "Time Limit Exceeded"]:
+
+        # Handle runtime errors (NZEC)
+        if status == "Runtime Error (NZEC)":
+            print("Runtime Error (NZEC) occurred. Details:")
+            print("Error:", result.get("stderr"))
             return result
+
+        if status in ["Accepted", "Compilation Error", "Time Limit Exceeded"]:
+            return result
+
         print(f"Current status: {status}. Retrying in 2 seconds...")
         time.sleep(2)
+
     print("Timeout reached. No result available.")
     return None
 
