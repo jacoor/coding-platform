@@ -13,6 +13,9 @@ HEADERS = {
     "x-rapidapi-key": os.getenv("RAPIDAPI_KEY"),  # Load the API key from the environment
 }
 
+# Configurable delay (in seconds)
+DELAY = 0.5  # Default to 500ms
+
 def read_file(file_path):
     with open(file_path, "r") as file:
         return file.read()
@@ -59,8 +62,8 @@ def wait_for_result(token, timeout=30):
         if status in ["Accepted", "Compilation Error", "Time Limit Exceeded"]:
             return result
 
-        print(f"Current status: {status}. Retrying in 2 seconds...")
-        time.sleep(2)
+        print(f"Current status: {status}. Retrying in {DELAY} seconds...")
+        time.sleep(DELAY)  # Use the global DELAY value
 
     print("Timeout reached. No result available.")
     return None
@@ -74,7 +77,7 @@ def main():
         return
 
     print("Waiting for result...")
-    result = wait_for_result(token, timeout=30)
+    result = wait_for_result(token, timeout=30)  # Timeout is set to 30 seconds
 
     if result:
         print("Final Status:", result["status"]["description"])
