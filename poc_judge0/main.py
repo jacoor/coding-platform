@@ -60,8 +60,7 @@ def submit_code(code):
     data = {
         "source_code": code,
         "language_id": 71,  # Language ID for Python 3.8.1
-        "stdin": "",  # Empty input for now (you can modify this)
-        "expected_output": "",  # Optional: specify expected output if needed
+        "redirect_stderr_to_stdout": True  # Redirect stderr to stdout
     }
 
     try:
@@ -108,27 +107,25 @@ def wait_for_result(token, timeout=30):
         status = result["status"]["description"]
         logging.info(f"Current status: {status}")
 
-        # Safely get stderr output
-        stderr_output = result.get("stderr", "")
+        # Safely get stdout output
+        stdout_output = result.get("stdout", "")
 
-        # Check if tests passed
-        if stderr_output and "OK" in stderr_output:
+        # Check if tests passed based on stdout
+        if stdout_output and "OK" in stdout_output:
             logging.info("All tests passed successfully.")
             return result
 
         # Handle runtime errors (NZEC)
         if status == "Runtime Error (NZEC)":
             logging.error("Runtime Error (NZEC) occurred. Details:")
-            logging.error("Error:", stderr_output)
+            logging.error("Output:", stdout_output)
             return result  # Stop processing further
         
         # Handle other terminal states (Compilation Error, etc.)
         if status in ["Compilation Error", "Time Limit Exceeded"]:
             return result
 
-        if status != "Processing":
-            logging.info(f"Current status: {status}. Retrying in {DELAY} seconds...")
-        
+        logging.info(f"Current status: {status}. Retrying in {DELAY} seconds...")
         time.sleep(DELAY)  # Use the global DELAY value
 
     logging.warning("Timeout reached. No result available.")
