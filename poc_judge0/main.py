@@ -1,24 +1,32 @@
 import requests
-import json
+from dotenv import load_dotenv
+import os
 import time
 
-# Judge0 API URL
+# Load environment variables from .env file
+load_dotenv()
+
+# Judge0 API configuration
 API_URL = "https://judge0-ce.p.rapidapi.com/submissions"
 HEADERS = {
     "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-    "x-rapidapi-key": "79dfa15cbdmsh8031319b3d7e30ep18a717jsn3d23dbcea455",  # Zastąp własnym kluczem API
+    "x-rapidapi-key": os.getenv("RAPIDAPI_KEY"),  # Load the API key from the environment
 }
-
 
 def read_file(file_path):
     with open(file_path, "r") as file:
         return file.read()
 
-def submit_code(code, tests):
+def concatenate_files(file1, file2):
+    """Combine the contents of two files."""
+    code = read_file(file1)
+    tests = read_file(file2)
+    return f"{code}\n\n{tests}"
+
+def submit_code(code):
     payload = {
         "source_code": code,
         "language_id": 71,  # Python (3.8.1)
-        "stdin": tests,
     }
 
     response = requests.post(API_URL, headers=HEADERS, json=payload)
@@ -36,31 +44,36 @@ def get_submission_result(token):
         print("Error fetching submission result:", response.text)
         return None
 
-def wait_for_result(token):
-    print("Waiting for result...")
-    while True:
+def wait_for_result(token, timeout=30):
+    start_time = time.time()
+    while time.time() - start_time < timeout:
         result = get_submission_result(token)
         status = result["status"]["description"]
         if status in ["Accepted", "Compilation Error", "Runtime Error", "Time Limit Exceeded"]:
             return result
         print(f"Current status: {status}. Retrying in 2 seconds...")
         time.sleep(2)
+    print("Timeout reached. No result available.")
+    return None
 
 def main():
-    code = read_file("code.py")
-    tests = read_file("tests.txt")
+    combined_code = concatenate_files("code.py", "tests.py")
 
     print("Submitting code...")
-    token = submit_code(code, tests)
+    token = submit_code(combined_code)
     if not token:
         return
 
-    result = wait_for_result(token)
+    print("Waiting for result...")
+    result = wait_for_result(token, timeout=30)
 
-    print("Final Status:", result["status"]["description"])
-    print("Output:", result.get("stdout"))  # Standard Output
-    print("Error:", result.get("stderr"))   # Standard Error
-    print("Compilation Error:", result.get("compile_output"))
+    if result:
+        print("Final Status:", result["status"]["description"])
+        print("Output:", result.get("stdout"))  # Standard Output
+        print("Error:", result.get("stderr"))   # Standard Error
+        print("Compilation Error:", result.get("compile_output"))
+    else:
+        print("Failed to fetch the result within 30 seconds.")
 
 if __name__ == "__main__":
     main()
