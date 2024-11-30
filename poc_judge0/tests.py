@@ -1,20 +1,13 @@
-import pytest
+import unittest
 
-def test_addition():
-    result = 1 + 1
-    assert result == 2
+# Test class
+class TestMathFunctions(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(2, 3), 5)
+        self.assertEqual(add(-1, 1), 0)
+        self.assertEqual(add(-1, -1), -2)
 
-def test_subtraction():
-    result = 5 - 3
-    assert result == 2
-
-def test_multiplication():
-    result = 3 * 2
-    assert result == 6
-
-def test_division():
-    result = 10 / 2
-    assert result == 5.0
-
-# More tests can be added here...
-
+    def test_subtract(self):
+        self.assertEqual(subtract(5, 3), 2)
+        self.assertEqual(subtract(1, 1), 0)
+        self.assertEqual(subtract(-1, -1), 0)

@@ -31,23 +31,17 @@ def concatenate_files(code_file, test_file):
 def prepare_test_script(user_code, test_cases):
     """Prepare the test script by combining user code with pytest test cases."""
     full_script = f"""
-# Install pytest
-import subprocess
-import sys
-
-subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'pytest'])
 
 # User's original code
 {user_code}
 
-# Test cases
-import pytest
 
 {test_cases}
 
 # Run tests
+
 if __name__ == '__main__':
-    pytest.main(['-v'])
+    unittest.main()
 """
     return full_script
 
