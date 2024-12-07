@@ -1,13 +1,37 @@
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
-    <link href="{% static 'core_theme/css/styles.css' %}" rel="stylesheet">
+    {% tailwind_css %}
 </head>
-<body class="bg-gray-100 text-center">
-    <h1 class="text-3xl font-bold text-blue-500 mt-10">Welcome to Django with Tailwind CSS!</h1>
+<body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal">
+    <!-- Navigation Bar -->
+    <nav class="bg-blue-500 p-4">
+        <div class="container mx-auto flex justify-between">
+            <a href="#" class="text-white text-lg font-bold">MySite</a>
+            <div>
+                <a href="#" class="text-white px-3">Home</a>
+                <a href="#" class="text-white px-3">About</a>
+                <a href="#" class="text-white px-3">Contact</a>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section class="bg-blue-600 py-20">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl text-white font-bold mb-4">Welcome to MySite</h1>
+            <p class="text-white mb-8">This is a simple Tailwind CSS styled page.</p>
+            <a href="#" class="bg-white text-blue-600 font-semibold py-2 px-4 rounded">Get Started</a>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-blue-500 p-4 mt-10">
+        <div class="container mx-auto text-center text-white">
+            &copy; 2024 MySite. All rights reserved.
+        </div>
+    </footer>
 </body>
 </html>
