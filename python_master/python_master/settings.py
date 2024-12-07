@@ -77,6 +77,15 @@ WSGI_APPLICATION = "python_master.wsgi.application"
 
 TAILWIND_APP_NAME = "core_theme"
 
+JUDGE0 = {
+    "API_URL": "https://judge0-ce.p.rapidapi.com/submissions",
+    "HEADERS": {
+        "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
+        "x-rapidapi-key": config("RAPIDAPI_KEY"),
+    },
+    "DELAY": 0.5,
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

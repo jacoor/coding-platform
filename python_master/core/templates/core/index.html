@@ -18,6 +18,17 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .result-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal">
@@ -32,7 +43,16 @@
     <div class="text-center mt-4">
         <button id="submit-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Submit</button>
     </div>
+
     <div id="result" class="hidden text-center mt-4 text-red-500"></div>
+
+    <div id="result-container" class="result-container hidden">
+        <div class="result-title">Submission Result</div>
+        <div><strong>Status:</strong> <span id="result-status"></span></div>
+        <div><strong>Stdout:</strong> <pre id="result-stdout"></pre></div>
+        <div><strong>Stderr:</strong> <pre id="result-stderr"></pre></div>
+    </div>
+
     <script>
         require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.34.1/min/vs' }});
         require(['vs/editor/editor.main'], function() {
@@ -60,8 +80,20 @@
                 .then(response => response.json())
                 .then(data => {
                     const resultDiv = document.getElementById('result');
-                    resultDiv.textContent = data.message;
-                    resultDiv.classList.remove('hidden');
+                    const resultContainer = document.getElementById('result-container');
+                    const resultStatus = document.getElementById('result-status');
+                    const resultStdout = document.getElementById('result-stdout');
+                    const resultStderr = document.getElementById('result-stderr');
+
+                    if (data.status === "success") {
+                        resultStatus.textContent = data.result.status;
+                        resultStdout.textContent = data.result.stdout || "No output";
+                        resultStderr.textContent = data.result.stderr || "No errors";
+                        resultContainer.classList.remove('hidden');
+                    } else {
+                        resultDiv.textContent = data.message;
+                        resultDiv.classList.remove('hidden');
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
