@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Code Editor</title>
     {% tailwind_css %}
     <script src="https://unpkg.com/monaco-editor@0.34.1/min/vs/loader.js"></script>
     <style>
@@ -21,52 +21,29 @@
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal">
-    <!-- Navigation Bar -->
-    <nav class="bg-blue-500 p-4">
-        <div class="container mx-auto flex justify-between">
-            <a href="#" class="text-white text-lg font-bold">MySite</a>
-            <div>
-                <a href="#" class="text-white px-3">Home</a>
-                <a href="#" class="text-white px-3">About</a>
-                <a href="#" class="text-white px-3">Contact</a>
-            </div>
-        </div>
-    </nav>
-    <!-- Hero Section -->
-    <section class="bg-blue-600 py-20">
-        <div class="container mx-auto text-center">
-            <h1 class="text-4xl text-white font-bold mb-4">Welcome to MySite</h1>
-            <p class="text-white mb-8">This is a simple Tailwind CSS styled page.</p>
-            <a href="#" class="bg-white text-blue-600 font-semibold py-2 px-4 rounded">Get Started</a>
-        </div>
-    </section>
-    <section class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal">
-        <h1 class="text-center text-2xl font-bold mt-4">Code Editor</h1>
-        <div class="editor-container mx-auto mt-4">
-            <div id="solution-editor" class="editor"></div>
-            <div id="tests-editor" class="editor"></div>
-        </div>
-        <script>
-            require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.34.1/min/vs' }});
-            require(['vs/editor/editor.main'], function() {
-                var solutionEditor = monaco.editor.create(document.getElementById('solution-editor'), {
-                    value: '# Write your solution here\n',
-                    language: 'python',
-                    theme: 'vs-dark'
-                });
-                var testsEditor = monaco.editor.create(document.getElementById('tests-editor'), {
-                    value: '# Write your sample tests here\n',
-                    language: 'python',
-                    theme: 'vs-dark'
-                });
+
+    <h1 class="text-center text-2xl font-bold mt-4">Code Editor</h1>
+
+    <div class="editor-container mx-auto mt-4">
+        <div id="solution-editor" class="editor"></div>
+        <div id="tests-editor" class="editor"></div>
+    </div>
+
+    <script>
+        require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.34.1/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            var solutionEditor = monaco.editor.create(document.getElementById('solution-editor'), {
+                value: '# Write your solution here\n',
+                language: 'python',
+                theme: 'vs-dark'
             });
-        </script>
-    </section>
-    <!-- Footer -->
-    <footer class="bg-blue-500 p-4 mt-10">
-        <div class="container mx-auto text-center text-white">
-            &copy; 2024 MySite. All rights reserved.
-        </div>
-    </footer>
+
+            var testsEditor = monaco.editor.create(document.getElementById('tests-editor'), {
+                value: '# Write your sample tests here\n',
+                language: 'python',
+                theme: 'vs-dark'
+            });
+        });
+    </script>
 </body>
 </html>
