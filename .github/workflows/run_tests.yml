@@ -7,6 +7,9 @@ on:
 jobs:
   pytests:
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: ./pyton_master
     steps:
       - name: Cancel Previous Runs
         if: "!endsWith(github.ref, '/master') && !endsWith(github.ref, '/dev')"
