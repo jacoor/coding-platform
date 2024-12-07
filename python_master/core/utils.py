@@ -1,7 +1,8 @@
-import requests
 import logging
-from django.conf import settings
 import time
+
+import requests
+from django.conf import settings
 
 
 def submit_code(code):
@@ -24,7 +25,7 @@ def submit_code(code):
             logging.error(f"Error during submission: {response.status_code}, {response.text}")
             raise Exception(f"Error during submission: {response.status_code}, {response.text}")
     except requests.exceptions.RequestException as e:
-        logging.error(f"An error occurred while submitting the code: {e}")
+        logging.exception(f"An error occurred while submitting the code: {e}")
         return None
 
 
@@ -42,7 +43,7 @@ def get_submission_result(token):
             logging.error(f"Error fetching result: {response.status_code}, {response.text}")
             return None
     except requests.exceptions.RequestException as e:
-        logging.error(f"An error occurred while fetching the result: {e}")
+        logging.exception(f"An error occurred while fetching the result: {e}")
         return None
 
 

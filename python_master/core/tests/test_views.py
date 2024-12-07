@@ -1,16 +1,17 @@
 import json
-import pytest
-from django.urls import reverse
-from django.test import Client
 from unittest.mock import patch
 
+import pytest
+from django.test import Client
+from django.urls import reverse
 
-@pytest.fixture
+
+@pytest.fixture()
 def client():
     return Client()
 
 
-@pytest.fixture
+@pytest.fixture()
 def url():
     return reverse("submit")  # Ensure this matches your URL configuration
 

@@ -1,7 +1,9 @@
+import json
+
 from django.http import JsonResponse
 from django.views import View
-import json
 from django.views.generic import TemplateView
+
 from .utils import submit_code, wait_for_result
 
 

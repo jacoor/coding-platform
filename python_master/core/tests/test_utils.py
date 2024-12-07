@@ -1,7 +1,9 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
-from unittest.mock import patch, MagicMock
-from ..utils import submit_code, get_submission_result, wait_for_result
 from django.test import override_settings
+
+from ..utils import get_submission_result, submit_code, wait_for_result
 
 
 # Test for submit_code function
