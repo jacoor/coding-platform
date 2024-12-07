@@ -81,7 +81,7 @@ JUDGE0 = {
     "API_URL": "https://judge0-ce.p.rapidapi.com/submissions",
     "HEADERS": {
         "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
-        "x-rapidapi-key": config("RAPIDAPI_KEY"),
+        "x-rapidapi-key": config("RAPIDAPI_KEY", default=""),
     },
     "DELAY": 0.5,
 }
