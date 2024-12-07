@@ -28,10 +28,9 @@ def test_submit_code_failure(mock_post: MagicMock) -> None:
     mock_response.status_code = 400
     mock_response.text = "Bad request"
     mock_post.return_value = mock_response
-    # Call the function
-    token = submit_code('print("Hello, World!")')
-    # Assertions
-    assert token is None
+    # Assert that an exception is raised
+    with pytest.raises(RuntimeError, match="Error during submission"):
+        submit_code('print("Hello, World!")')
     mock_post.assert_called_once()
 
 
