@@ -12,24 +12,19 @@ class IndexView(TemplateView):
 
 
 class SubmitView(View):
-    def post(self, request, *args, **kwargs):
+    def post(self, request: JsonResponse, *args: tuple, **kwargs: dict) -> JsonResponse:
+        # args and kwargs are not used, so let's remove them
         try:
             data = json.loads(request.body)
             code = data.get("code", "")
             tests = data.get("tests", "")
 
             # Combine the code and tests into a full script
-            full_script = f"""
-# User's original code
-{code}
+            full_script = (
+                f"# User's original code\n{code}\n\n{tests}\n\n"
+                "# Run tests\nif __name__ == '__main__':\n    unittest.main()"
+            )
 
-{tests}
-
-# Run tests
-if __name__ == '__main__':
-    unittest.main()
-"""
-            print(full_script)
             # Submit the full script to Judge0
             token = submit_code(full_script)
             if not token:
