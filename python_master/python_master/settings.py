@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'tailwind',
-    'django_browser_reload',  # Optional: for live reloading
+    "tailwind",
+    "django_browser_reload",  # Optional: for live reloading
     "core_theme",
 ] + PROJECT_APPS
 
@@ -75,7 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "python_master.wsgi.application"
 
-TAILWIND_APP_NAME = 'core_theme'
+TAILWIND_APP_NAME = "core_theme"
 
 
 # Database
@@ -123,7 +123,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "core_theme/static",
     BASE_DIR / "core_theme/static/css/dist",
