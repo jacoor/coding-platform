@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PROJECT_APPS = ["core"]
 
 # Application definition
 
@@ -38,7 +39,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-]
+    'tailwind',
+    'django_browser_reload',  # Optional: for live reloading
+    "core_theme",
+] + PROJECT_APPS
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -69,6 +74,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "python_master.wsgi.application"
+
+TAILWIND_APP_NAME = 'core_theme'
 
 
 # Database
