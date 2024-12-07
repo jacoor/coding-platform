@@ -18,12 +18,7 @@ def url() -> str:
 
 @patch("core.views.submit_code")
 @patch("core.views.wait_for_result")
-def test_submit_view_success(
-    mock_wait_for_result: patch,
-    mock_submit_code: patch,
-    client: Client,
-    url: str
-) -> None:
+def test_submit_view_success(mock_wait_for_result: patch, mock_submit_code: patch, client: Client, url: str) -> None:
     # Mock successful token generation and result retrieval
     mock_submit_code.return_value = "fake-token"
     mock_wait_for_result.return_value = {"status": {"description": "Accepted"}, "stdout": "Test output", "stderr": None}
@@ -41,11 +36,7 @@ def test_submit_view_success(
 
 
 @patch("core.views.submit_code")
-def test_submit_view_code_submission_failure(
-    mock_submit_code: patch,
-    client: Client,
-    url: str
-) -> None:
+def test_submit_view_code_submission_failure(mock_submit_code: patch, client: Client, url: str) -> None:
     # Mock a failed token generation
     mock_submit_code.return_value = None
     response = client.post(

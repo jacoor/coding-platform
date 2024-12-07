@@ -19,7 +19,7 @@ def submit_code(code: str) -> str:
             settings.JUDGE0["API_URL"],
             json=data,
             headers=settings.JUDGE0["HEADERS"],
-            timeout=10  # Add timeout
+            timeout=10,  # Add timeout
         )
 
         created_status = 201
@@ -44,7 +44,7 @@ def get_submission_result(token: str) -> dict:
         response = requests.get(
             f"{settings.JUDGE0['API_URL']}/{token}",
             headers=settings.JUDGE0["HEADERS"],
-            timeout=10  # Add timeout
+            timeout=10,  # Add timeout
         )
 
         ok_status = 200

@@ -32,7 +32,7 @@ PROJECT_APPS = ["core"]
 
 # Application definition
 
-INSTALLED_APPS = [ # noqa: RUF005
+INSTALLED_APPS = [  # noqa: RUF005
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
