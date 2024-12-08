@@ -1,12 +1,13 @@
 import pytest
-from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.utils import timezone
+
 from core.models import Task  # Replace 'myapp' with your app name
 
-@pytest.mark.django_db
-class TestTaskModel:
 
-    def test_task_creation(self):
+@pytest.mark.django_db()
+class TestTaskModel:
+    def test_task_creation(self) -> None:  # Added return type annotation
         task = Task.objects.create(
             title="Sample Task",
             code="def add(a, b):\n    return a + b",
@@ -29,22 +30,21 @@ class TestAddFunction(unittest.TestCase):
         assert task.difficulty == "Easy"
         assert task.created_at <= timezone.now()
 
-    def test_task_string_representation(self):
+    def test_task_string_representation(self) -> None:  # Added return type annotation
         task = Task(title="Sample Task")
         assert str(task) == "Sample Task"
 
-    def test_code_field_validation(self):
+    def test_code_field_validation(self) -> None:  # Added return type annotation
         with pytest.raises(ValidationError):
-            task = Task(
+            Task.objects.create(
                 title="Invalid Task",
                 code="",
                 tests="",
                 description="",
                 difficulty="Easy",
             )
-            task.full_clean()
 
-    def test_difficulty_choices(self):
+    def test_difficulty_choices(self) -> None:  # Added return type annotation
         task = Task(
             title="Medium Task",
             code="print('Hello, World!')",
@@ -57,11 +57,10 @@ class TestAddFunction(unittest.TestCase):
 
         # Test invalid difficulty
         with pytest.raises(ValidationError):
-            task = Task(
+            Task.objects.create(
                 title="Invalid Difficulty Task",
                 code="print('Hello, World!')",
                 tests="import unittest",
                 description="An invalid difficulty task.",
                 difficulty="Unknown",
             )
-            task.full_clean()
