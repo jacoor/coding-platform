@@ -35,14 +35,16 @@ class TestAddFunction(unittest.TestCase):
         assert str(task) == "Sample Task"
 
     def test_code_field_validation(self) -> None:  # Added return type annotation
+        task = Task(
+            title="Invalid Task",
+            code="",  # Invalid code
+            tests="",
+            description="",
+            difficulty="Easy",
+        )
+        # Explicitly trigger validation
         with pytest.raises(ValidationError):
-            Task.objects.create(
-                title="Invalid Task",
-                code="",
-                tests="",
-                description="",
-                difficulty="Easy",
-            )
+            task.full_clean()
 
     def test_difficulty_choices(self) -> None:  # Added return type annotation
         task = Task(
@@ -56,11 +58,13 @@ class TestAddFunction(unittest.TestCase):
         assert task.difficulty == "Medium"
 
         # Test invalid difficulty
+        task = Task(
+            title="Invalid Difficulty Task",
+            code="print('Hello, World!')",
+            tests="import unittest",
+            description="An invalid difficulty task.",
+            difficulty="Unknown",  # Invalid difficulty
+        )
+        # Explicitly trigger validation
         with pytest.raises(ValidationError):
-            Task.objects.create(
-                title="Invalid Difficulty Task",
-                code="print('Hello, World!')",
-                tests="import unittest",
-                description="An invalid difficulty task.",
-                difficulty="Unknown",
-            )
+            task.full_clean()
