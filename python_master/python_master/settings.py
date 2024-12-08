@@ -134,6 +134,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [
+    # BASE_DIR / "static",  # Adjust according to your project structure
     BASE_DIR / "core_theme/static",
     BASE_DIR / "core_theme/static/css/dist",
 ]
