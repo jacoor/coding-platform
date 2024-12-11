@@ -1,22 +1,27 @@
 import pytest
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 
-from core.models import Task, EducationPath  # Import EducationPath
+from core.models import EducationPath, Task  # Import EducationPath
 
 
 @pytest.mark.django_db()
 class TestTaskModel:
-    def test_task_creation_with_education_path(self) -> None:  # Added return type annotation
-        # Create an education path
-        education_path = EducationPath.objects.create(
+    def test_task_creation_with_multiple_education_paths(self) -> None:  # Added return type annotation
+        # Create multiple education paths
+        path1 = EducationPath.objects.create(
             name="Python Basics",
             description="Learn the fundamentals of Python.",
             ordering=1,
             difficulty="Easy",
         )
+        path2 = EducationPath.objects.create(
+            name="Web Development",
+            description="Build web applications.",
+            ordering=2,
+            difficulty="Medium",
+        )
 
-        # Create a task linked to the education path
+        # Create a task linked to multiple education paths
         task = Task.objects.create(
             title="Sample Task",
             code="def add(a, b):\n    return a + b",
@@ -29,46 +34,37 @@ class TestAddFunction(unittest.TestCase):
             description="Implement the add function.",
             hints="Think about basic arithmetic operations.",
             difficulty="Easy",
-            education_path=education_path,  # Set the relation
         )
+        task.education_paths.set([path1, path2])  # Set multiple paths
+        task.save()
+
         assert task.id is not None
         assert task.title == "Sample Task"
-        assert task.education_path == education_path  # Verify the relation
+        assert task.education_paths.count() == 2  # Verify multiple relations
+        assert path1 in task.education_paths.all()
+        assert path2 in task.education_paths.all()
 
     def test_task_string_representation(self) -> None:  # Added return type annotation
-        education_path = EducationPath.objects.create(
-            name="Advanced Python",
-            description="Deep dive into Python.",
-            ordering=2,
-            difficulty="Medium",
-        )
-        task = Task(title="Sample Task", education_path=education_path)
+        task = Task(title="Sample Task")
         assert str(task) == "Sample Task"
 
     def test_code_field_validation(self) -> None:  # Added return type annotation
-        education_path = EducationPath.objects.create(
-            name="Web Development",
-            description="Learn how to build web apps.",
-            ordering=3,
-            difficulty="Medium",
-        )
         task = Task(
             title="Invalid Task",
             code="",  # Invalid code
             tests="",
             description="",
             difficulty="Easy",
-            education_path=education_path,
         )
         # Explicitly trigger validation
         with pytest.raises(ValidationError):
             task.full_clean()
 
     def test_difficulty_choices(self) -> None:  # Added return type annotation
-        education_path = EducationPath.objects.create(
+        path = EducationPath.objects.create(
             name="Data Science",
             description="Data analysis and machine learning.",
-            ordering=4,
+            ordering=3,
             difficulty="Hard",
         )
         task = Task(
@@ -77,11 +73,11 @@ class TestAddFunction(unittest.TestCase):
             tests="import unittest",
             description="A medium difficulty task.",
             difficulty="Medium",
-            education_path=education_path,
         )
         task.save()
+        task.education_paths.add(path)  # Associate with a path
         assert task.difficulty == "Medium"
-        assert task.education_path == education_path
+        assert path in task.education_paths.all()
 
         # Test invalid difficulty
         task = Task(
@@ -90,7 +86,6 @@ class TestAddFunction(unittest.TestCase):
             tests="import unittest",
             description="An invalid difficulty task.",
             difficulty="Unknown",  # Invalid difficulty
-            education_path=education_path,
         )
         # Explicitly trigger validation
         with pytest.raises(ValidationError):
