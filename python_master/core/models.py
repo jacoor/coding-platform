@@ -18,6 +18,7 @@ class Task(models.Model):
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when created
     updated_on = models.DateTimeField(auto_now=True)  # Automatically set on update
+    education_paths = models.ManyToManyField("EducationPath", related_name="tasks")  # ManyToMany field
 
     def __str__(self) -> str:
         return self.title

@@ -1,9 +1,10 @@
 import pytest
 from django.db import IntegrityError
-from core.models import EducationPath  # Adjust 'myapp' to the actual app name
-from typing import Any
 
-@pytest.mark.django_db
+from core.models import EducationPath  # Adjust 'myapp' to the actual app name
+
+
+@pytest.mark.django_db()
 def test_education_path_creation() -> None:
     path: EducationPath = EducationPath.objects.create(
         name="Introduction to Python",
@@ -16,7 +17,8 @@ def test_education_path_creation() -> None:
     assert path.ordering == 1
     assert path.difficulty == "Easy"
 
-@pytest.mark.django_db
+
+@pytest.mark.django_db()
 def test_education_path_ordering() -> None:
     path1: EducationPath = EducationPath.objects.create(
         name="Introduction to Python",
@@ -33,9 +35,9 @@ def test_education_path_ordering() -> None:
     paths: list[EducationPath] = list(EducationPath.objects.all().order_by("ordering"))
     assert paths == [path2, path1]
 
-@pytest.mark.django_db
+
+@pytest.mark.django_db()
 def test_education_path_timestamps() -> None:
-    from datetime import timedelta
     from django.utils.timezone import now
 
     path: EducationPath = EducationPath.objects.create(
@@ -51,7 +53,8 @@ def test_education_path_timestamps() -> None:
     path.save()
     assert path.updated_at > path.created_at
 
-@pytest.mark.django_db
+
+@pytest.mark.django_db()
 def test_education_path_unique_name() -> None:
     EducationPath.objects.create(
         name="Web Development",
