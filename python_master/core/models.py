@@ -4,7 +4,6 @@ from django.db import models
 
 
 class Task(models.Model):
-
     DIFFICULTY_CHOICES: ClassVar[list[tuple[str, str]]] = [
         ("Easy", "Easy"),
         ("Medium", "Medium"),
@@ -22,6 +21,7 @@ class Task(models.Model):
 
     def __str__(self) -> str:
         return self.title
+
 
 class EducationPath(models.Model):
     DIFFICULTY_CHOICES: ClassVar[list[tuple[str, str]]] = [
