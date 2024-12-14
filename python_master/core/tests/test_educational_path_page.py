@@ -11,7 +11,7 @@ def client() -> Client:
 
 
 @pytest.fixture()
-def create_education_paths():
+def create_education_paths() -> list[EducationPath]:
     return [
         EducationPath.objects.create(
             name=f"Path {i}",
@@ -34,7 +34,7 @@ def test_education_path_list_first_page(client: Client, create_education_paths: 
     # Then
     assert response.status_code == 200
     assert "paths" in response.context
-    assert len(response.context["paths"]) == 10  # Check if 10 paths are displayed per page
+    assert len(response.context["paths"]) == 10
     for path in response.context["paths"]:
         assert hasattr(path, "name")
         assert hasattr(path, "description")
@@ -43,7 +43,9 @@ def test_education_path_list_first_page(client: Client, create_education_paths: 
 
 @pytest.mark.django_db()
 @pytest.mark.parametrize(("page", "expected_count"), [(2, 10), (3, 10), (4, 1)])
-def test_education_path_list_pagination(client: Client, create_education_paths: list[EducationPath], page: int, expected_count: int) -> None:
+def test_education_path_list_pagination(
+    client: Client, create_education_paths: list[EducationPath], page: int, expected_count: int
+) -> None:
     # Given
     url = reverse("education_path_list")
 
@@ -51,9 +53,9 @@ def test_education_path_list_pagination(client: Client, create_education_paths: 
     response = client.get(f"{url}?page={page}")
 
     # Then
-    assert response.status_code == 200
+    assert len(response.context["paths"]) == expected_count
     assert "paths" in response.context
-    assert len(response.context["paths"]) == expected_count  # Check if the correct number of paths are displayed per page
+    assert len(response.context["paths"]) == expected_count
 
 
 @pytest.mark.django_db()
@@ -65,6 +67,6 @@ def test_education_path_list_empty(client: Client) -> None:
     response = client.get(url)
 
     # Then
-    assert response.status_code == 200
+    assert len(response.context["paths"]) == 0
     assert "paths" in response.context
-    assert len(response.context["paths"]) == 0  # Check if no paths are displayed when there are no paths in the database
+    assert len(response.context["paths"]) == 0
