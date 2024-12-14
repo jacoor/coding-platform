@@ -1,4 +1,5 @@
 import json
+from typing import ClassVar
 
 from django.http import JsonResponse
 from django.views import View
@@ -59,5 +60,4 @@ class EducationPathListView(ListView):
     template_name = "core/education_path_list.html"
     context_object_name = "paths"
     paginate_by = 10
-    ordering = ["ordering"]
-
+    ordering: ClassVar[list[str]] = ["ordering"]
