@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-PROJECT_APPS = ["core"]
+PROJECT_APPS = ["core", "users"]
 
 # Application definition
 
@@ -96,6 +96,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+AUTH_USER_MODEL = "users.User"
 
 
 # Password validation
