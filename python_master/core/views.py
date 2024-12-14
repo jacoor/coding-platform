@@ -2,11 +2,11 @@ import json
 
 from django.http import JsonResponse
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import ListView, TemplateView
+
+from core.models import EducationPath
 
 from .utils import submit_code, wait_for_result
-from django.views.generic import ListView
-from core.models import EducationPath
 
 
 class IndexView(TemplateView):
