@@ -5,6 +5,8 @@ from django.views import View
 from django.views.generic import TemplateView
 
 from .utils import submit_code, wait_for_result
+from django.views.generic import ListView
+from core.models import EducationPath
 
 
 class IndexView(TemplateView):
@@ -50,3 +52,13 @@ class SubmitView(View):
 
         except json.JSONDecodeError:
             return JsonResponse({"status": "error", "message": "Invalid JSON"}, status=400)
+
+class EducationPathListView(ListView):
+    model = EducationPath
+    template_name = "core/education_path_list.html"
+    context_object_name = "paths"
+    paginate_by = 10
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
