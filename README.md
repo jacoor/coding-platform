@@ -225,3 +225,12 @@ sequenceDiagram
         S-->>U: Wyświetla informację o niepowodzeniu
     end
 ```
+
+## TODO:
+- API - rejestracji użytkownika nie będzie. Użytkownik będzie tworzony przez webhooka a make.com - wykorzystam webhook z mailignR
+- logowanie 
+    - albo mailem i haslem (haslo trzeba bedzie zresetowac przy tworzeniu uzuytkownika)
+    - albo bezpiecznym linkiem - moge wyslac maila z linkiem do logowania, waznym 10 min. 
+
+To priority 
+- stworzyc pierwsze zadania i pokazac społeczności
