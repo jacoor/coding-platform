@@ -28,17 +28,22 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PROJECT_APPS = ["core", "users"]
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [  # noqa: RUF005
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-]
+    "tailwind",
+    "django_browser_reload",  # Optional: for live reloading
+    "core_theme",
+] + PROJECT_APPS
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -70,6 +75,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "python_master.wsgi.application"
 
+TAILWIND_APP_NAME = "core_theme"
+
+JUDGE0 = {
+    "API_URL": "https://judge0-ce.p.rapidapi.com/submissions",
+    "HEADERS": {
+        "x-rapidapi-host": "judge0-ce.p.rapidapi.com",
+        "x-rapidapi-key": config("RAPIDAPI_KEY", default=""),
+    },
+    "DELAY": 0.5,
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -80,6 +96,8 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+AUTH_USER_MODEL = "users.User"
 
 
 # Password validation
@@ -116,7 +134,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [
+    # BASE_DIR / "static",  # Adjust according to your project structure
+    BASE_DIR / "core_theme/static",
+    BASE_DIR / "core_theme/static/css/dist",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

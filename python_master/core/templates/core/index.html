@@ -1,0 +1,108 @@
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Editor</title>
+    {% tailwind_css %}
+    <script src="https://unpkg.com/monaco-editor@0.34.1/min/vs/loader.js"></script>
+    <style>
+        .editor-container {
+            display: flex;
+            justify-content: space-between;
+            height: 80vh;
+        }
+        .editor {
+            width: 48%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .result-container {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans leading-normal tracking-normal">
+
+    <h1 class="text-center text-2xl font-bold mt-4">Code Editor</h1>
+
+    <div class="editor-container mx-auto mt-4">
+        <div id="solution-editor" class="editor"></div>
+        <div id="tests-editor" class="editor"></div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button id="submit-btn" class="bg-blue-500 text-white font-bold py-2 px-4 rounded">Submit</button>
+    </div>
+
+    <div id="result" class="hidden text-center mt-4 text-red-500"></div>
+
+    <div id="result-container" class="result-container hidden">
+        <div class="result-title">Submission Result</div>
+        <div><strong>Status:</strong> <span id="result-status"></span></div>
+        <div><strong>Stdout:</strong> <pre id="result-stdout"></pre></div>
+        <div><strong>Stderr:</strong> <pre id="result-stderr"></pre></div>
+    </div>
+
+    <script>
+        require.config({ paths: { 'vs': 'https://unpkg.com/monaco-editor@0.34.1/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            var solutionEditor = monaco.editor.create(document.getElementById('solution-editor'), {
+                value: '# Write your solution here\n',
+                language: 'python',
+                theme: 'vs-dark'
+            });
+            var testsEditor = monaco.editor.create(document.getElementById('tests-editor'), {
+                value: '# Write your sample tests here\n',
+                language: 'python',
+                theme: 'vs-dark'
+            });
+            document.getElementById('submit-btn').addEventListener('click', function() {
+                var code = solutionEditor.getValue();
+                var tests = testsEditor.getValue();
+                fetch('/submit/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ code: code, tests: tests })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const resultDiv = document.getElementById('result');
+                    const resultContainer = document.getElementById('result-container');
+                    const resultStatus = document.getElementById('result-status');
+                    const resultStdout = document.getElementById('result-stdout');
+                    const resultStderr = document.getElementById('result-stderr');
+
+                    if (data.status === "success") {
+                        resultStatus.textContent = data.result.status;
+                        resultStdout.textContent = data.result.stdout || "No output";
+                        resultStderr.textContent = data.result.stderr || "No errors";
+                        resultContainer.classList.remove('hidden');
+                    } else {
+                        resultDiv.textContent = data.message;
+                        resultDiv.classList.remove('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.textContent = 'An error occurred. Please try again.';
+                    resultDiv.classList.remove('hidden');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
