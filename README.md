@@ -104,3 +104,133 @@ ruff format --check           # Check formatting without changing files.
 
 For more, visit [Ruff Linter](https://docs.astral.sh/ruff/linter/) and [Ruff Formatter](https://docs.astral.sh/ruff/formatter/).
 
+### Database design
+
+```mermaid
+erDiagram
+    User {
+        int id
+        string email
+        string password
+        string first_name
+        string last_name
+        string google_id
+        string facebook_id
+        int completed_tasks_count() "Method to count completed tasks"
+    }
+
+    EducationPath {
+        int id
+        string name
+        string description
+        int ordering
+        string difficulty
+        datetime created_at
+        datetime updated_at
+    }
+
+    Task {
+        int id
+        string title
+        text code
+        text public_tests
+        text hidden_tests
+        text description
+        text hints
+        string difficulty
+        datetime created_at
+        datetime updated_on
+    }
+
+    UserTask {
+        int id
+        datetime completed_at
+        text user_code
+        text user_tests
+        text comments
+        text description
+        text hints
+        string difficulty
+        int user_id FK
+        int task_id FK
+    }
+
+    TaskHistory {
+        int id
+        datetime timestamp
+        text user_code
+        text user_tests
+        int user_task_id FK
+    }
+
+    User ||--o{ UserTask : "completes"
+    Task ||--o{ UserTask : "is completed by"
+    EducationPath ||--o{ Task : "contains"
+    User ||--o{ EducationPath : "chooses"
+    UserTask ||--o{ TaskHistory : "has history"
+```
+
+
+### Diagramy przepływu
+
+#### Proces rozpoczęcia pracy nad zadaniem
+
+```mermaid
+sequenceDiagram
+    participant U as Użytkownik
+    participant S as System
+    participant DB as Baza Danych
+
+    U->>S: Wybiera zadanie
+    S->>DB: Tworzy UserTask z kopią danych z Task
+    DB-->>S: Zapisuje UserTask
+    S-->>U: Wyświetla zadanie do wykonania
+```
+
+#### Proces testowania rozwiązania zadania
+
+
+```mermaid
+sequenceDiagram
+    participant U as Użytkownik
+    participant S as System
+    participant J as Judge0
+    participant DB as Baza Danych
+
+    U->>S: Wysyła kod do testowania
+    S->>J: Przesyła kod do Judge0
+    J-->>S: Zwraca wyniki testów
+    S->>DB: Tworzy zapis w TaskHistory
+    DB-->>S: Zapisuje historię
+    S-->>U: Wyświetla wyniki testów
+```
+
+#### Proces oznaczania zadania jako ukończone
+
+```mermaid
+sequenceDiagram
+    participant U as Użytkownik
+    participant S as System
+    participant J as Judge0
+    participant DB as Baza Danych
+
+    U->>S: Kliknięcie "Zrobione"
+    S->>J: Przesyła kod do Judge0 z testami niejawnymi
+    J-->>S: Zwraca wyniki testów
+    alt Testy przeszły
+        S->>DB: Oznacza UserTask jako ukończone
+        DB-->>S: Zapisuje zmiany
+        S-->>U: Wyświetla informację o ukończeniu zadania
+    else Testy nie przeszły
+        S-->>U: Wyświetla informację o niepowodzeniu
+    end
+```
+
+## TODO:
+- API - rejestracji użytkownika nie będzie. Użytkownik będzie tworzony przez webhooka a make.com - wykorzystam webhook z mailignR
+- logowanie 
+    - albo mailem i haslem (haslo trzeba bedzie zresetowac przy tworzeniu uzuytkownika)
+    - albo bezpiecznym linkiem - moge wyslac maila z linkiem do logowania, waznym 10 min. 
+
+To priority 
+- stworzyc pierwsze zadania i pokazac społeczności
